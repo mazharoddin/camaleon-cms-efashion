@@ -1,0 +1,14 @@
+{
+  "name" : "Efashion",
+  "description" : "",
+  "thumb" : "images/image.png",
+  "helpers": [
+    "Themes::Efashion::MainHelper"
+  ],
+  "hooks": {
+    "on_active": ["efashion_on_install_theme"],
+    "on_inactive": ["efashion_on_uninstall_theme"],
+    "on_theme_settings": ["efashion_settings"]
+    //here all your hooks
+  }
+}

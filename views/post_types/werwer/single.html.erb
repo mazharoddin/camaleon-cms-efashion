@@ -1,0 +1,43 @@
+<h1><%= @post.the_title %></h1>
+<hr>
+<div>
+    <%= raw @post.the_content %>
+</div>
+
+<h2>Custom Field Slider</h2>
+<hr>
+<%
+    slides, titles = [], []
+    @post.the_attribute_fields('untitled-my-slider').each_with_index do |attr, index|
+      titles << "<li data-target='#my_slider' data-slide-to='#{index}' class='#{"active" if index==0}'></li>"
+      slides << "<div class='item #{"active" if index==0}'>
+                    #{image_tag(attr['image'], style: 'margin: 0 auto;') if attr[:image].present?}
+                    <div class='carousel-caption'>
+                        <h4>#{attr[:title]}</h4>
+                        <p>#{attr[:descr]}</p>
+                    </div>
+                  </div>"
+    end
+%>
+
+<div id="my_slider" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <%= raw titles.join('') %>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        <%= raw slides.join('') %>
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#my_slider" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#my_slider" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
