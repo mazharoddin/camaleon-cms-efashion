@@ -94,47 +94,25 @@
 			
 			<div class="clearfix"></div>
 			<div class="content-top1">
+				<% current_site.the_products.limit(3).latest.decorate.each do |product| %>
+				 <% if product.eco_featured? %>
 				<div class="col-md-4 col-md3">
 					<div class="col-md1 simpleCart_shelfItem">
-						<a href="single.html">
-							<img class="img-responsive" src="images/pi6.png" alt="" />
+						<a href="<%= product.the_url %>">
+							<img class="img-responsive" src="<%= product.the_thumb_url %>" alt="" />
 						</a>
-						<h3><a href="single.html">Jeans</a></h3>
+						<h3><a href="<%= product.the_url %>"><%= product.the_title %></a></h3>
 						<div class="price">
-								<h5 class="item_price">$300</h5>
-								<a href="#" class="item_add">Add To Cart</a>
+								<h5 class="item_price"><%= product.the_price %></h5>
+								<a href="<%= product.the_url %>" class="item_add">Add To Cart</a>
 								<div class="clearfix"> </div>
 						</div>
 					</div>
 				</div>	
-			<div class="col-md-4 col-md3">
-					<div class="col-md1 simpleCart_shelfItem">
-						<a href="single.html">
-							<img class="img-responsive" src="images/pi7.png" alt="" />
-						</a>
-						<h3><a href="single.html">Tops</a></h3>
-						<div class="price">
-								<h5 class="item_price">$300</h5>
-								<a href="#" class="item_add">Add To Cart</a>
-								<div class="clearfix"> </div>
-						</div>
-						
-					</div>
-				</div>	
-			<div class="col-md-4 col-md3">
-					<div class="col-md1 simpleCart_shelfItem">
-						<a href="single.html">
-							<img class="img-responsive" src="images/pi.png" alt="" />
-						</a>
-						<h3><a href="single.html">Tops</a></h3>
-						<div class="price">
-								<h5 class="item_price">$300</h5>
-								<a href="#" class="item_add">Add To Cart</a>
-								<div class="clearfix"> </div>
-						</div>
-						
-					</div>
-				</div>	
+				<% end %>
+				<% end %>
+			
+			
 			
 			<div class="clearfix"> </div>
 			</div>		

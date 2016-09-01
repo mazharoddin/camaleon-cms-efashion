@@ -6,34 +6,37 @@
 		<div class="col-sm-4 world">
 					<ul >
 						<li>
-						<select class="in-drop">
-							  <option>English</option>
-							  <option>Japanese</option>
-							  <option>French</option>
-							</select></li>
-						<li><select class="in-drop1">
-							  <option>Dollar</option>
-							  <option>Euro</option>
-							  <option>Yen</option>
-							</select>
+						
+							<%= raw current_site.draw_languages("language-list list-inline pull-left", true) %>
+							
+						<li>
 						</li>
 					</ul>
 				</div>
 				<div class="col-sm-4 logo">
-					<a href="index.html"><img src="images/logo.png" alt=""></a>	
+					
+					<a href="<%= current_site.the_url %>"><img src="<%=current_site.the_logo %>" alt=""></a>	
 				</div>
 		
 			<div class="col-sm-4 header-left">		
-					<p class="log"><a href="account.html"  >Login</a>
-						<span>or</span><a  href="account.html"  >Signup</a></p>
+				  <% unless cama_current_user.present? %>
+					<p class="log"><a href="<%= plugins_ecommerce_login_path(return_to: site_current_url) %>"  >Login</a>
+						<span>or</span><a  href="<%= plugins_ecommerce_register_url(return_to: site_current_url) %>"  >Signup</a></p>
+				  <% else %>
+                     <p class="log"><a href="<%= cama_current_user.decorate.the_url %>"><span class="fa fa-user"> </span> <%= cama_current_user.the_name %></a> <p class="log"><a href="<%= cama_admin_dashboard_path %>"><span class="fa fa-tachometer"> </span> DashBoard </a></li>
+                      <p class="log"><a href="<%= plugins_ecommerce_orders_path %>"><span class="fa fa-cart"> </span> My Orders</a></li>
+                      <p class="log"><a href="<%= cama_admin_logout_url(return_to: site_current_url) %>"><span class="fa fa-sign-out"> </span> Logout</a></p>
+                  <% end %>
 					<div class="cart box_1">
-						<a href="checkout.html">
+	                    <% if cama_current_user.present? %>
+	                        <% cart = current_site.carts.set_user(current_user).first_or_create(name: "Cart by #{current_user.id}").decorate %>
+						<a href="<%= plugins_ecommerce_checkout_cart_path %>">
 						<h3> <div class="total">
-							<span class="simpleCart_total"></span></div>
-							<img src="images/cart.png" alt=""/></h3>
+							<span class="simpleCart_total"><%= cart.the_price  %></span></div>
+							<img src="<%= theme_asset_url("images/cart.png") %>" alt=""/></h3>
 						</a>
-						<p><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
-
+						<p><a href="<%= plugins_ecommerce_checkout_cart_path %>" class="simpleCart_empty">Empty Cart</a></p>
+					<% end %>
 					</div>
 					<div class="clearfix"> </div>
 			</div>
@@ -47,125 +50,79 @@
 				</div>
 		 <div class="col-sm-8 h_menu4">
 				<ul class="memenu skyblue">
-					  <li class=" grid"><a  href="index.html">Home</a></li>	
-				      <li><a  href="#">Men</a>
+                   
+					  <li class=" grid"><a  href="<%= current_site.the_url %>">Home</a></li>	
+                      <% cama_menu_parse_items(current_site.nav_menus.find_by_slug('main_menu').children).each do |item| %>
+                          <% if item[:has_children] %>
+				      <li><a  href="#"><%= item[:label] %></a>
 				      	<div class="mepanel">
 						<div class="row">
 							<div class="col1">
+								 <% if item[:levels] <= 1 %>
 								<div class="h_nav">
 									<h4>All Clothing</h4>
+									 
 									<ul>
-										<li><a href="products.html">Shirts</a></li>
-										<li><a href="products.html">Sports Wear</a></li>
-										<li><a href="products.html">Shorts</a></li>
-										<li><a href="products.html">Suits & Blazers</a></li>
-										<li><a href="products.html">Formal Shirts</a></li>
-										<li><a href="products.html">Sweatpants</a></li>
-										<li><a href="products.html">Swimwear</a></li>
-										<li><a href="products.html">Trousers & Chinos</a></li>
-										<li><a href="products.html">T-Shirts</a></li>
-										<li><a href="products.html">Underwear & Socks</a></li>
+										 <% item[:children].each_with_index do |ss_item, index| %>
+										<li><a href="<%= ss_item[:url] %>"><%= ss_item[:label] %></a></li>
+										 <% end %>
 										
 									</ul>	
+									 
 								</div>							
 							</div>
-							<div class="col1">
-								<div class="h_nav">
-									<h4>Footwear</h4>
-									<ul>
-										<li><a href="products.html">Formal Shoes</a></li>
-										<li><a href="products.html">Boots</a></li>
-										<li><a href="products.html">Sports Shoes</a></li>
-										<li><a href="products.html">Casual Shoes</a></li>
-										<li><a href="products.html">Running Shoes</a></li>
-										<li><a href="products.html">Sneakers</a></li>
-										<li><a href="products.html">Loafers</a></li>
-										<li><a href="products.html">Slippers</a></li>
-										<li><a href="products.html">Sandals</a></li>
-										<li><a href="products.html">Flip-flops</a></li>
-									
-									</ul>	
-								</div>							
+							 <% else %>
+                             <ul class="memenu skyblue-<%= (12/(12/item[:children].count).ceil).ceil %>">
+                                 <div class="row">
+                                     <% item[:children].each do |sub_item| %>
+                                         <div class="col-md-<%= (12/item[:children].count).ceil %>">
+                                             <ul class="multi-column-dropdown">
+                                                 <% ((sub_item[:children] || []).unshift(sub_item)).each_with_index do |ss_item, index| %>
+                                                     <% if index > 0 %>
+                                                         <li class="<%= 'current_item' if ss_item[:current_item] %> <%= 'current_parent_item' if ss_item[:current_parent] %>"><a href="<%= ss_item[:url] %>"><%= ss_item[:label] %></a></li>
+                                                     <% else %>
+                                                         <h6><%= ss_item[:label] %></h6>
+                                                     <% end %>
+                                                 <% end %>
+                                             </ul>
+                                         </div>
+										 <% end%>
+                                    <ul class="dropdown-menu multi-column pull-right columns-<%= (12/(12/item[:children].count).ceil).ceil %>">
+                                        <div class="row">
+                                            <% item[:children].each do |sub_item| %>
+                                                <div class="col-md-<%= (12/item[:children].count).ceil %>">
+                                                    <ul class="multi-column-dropdown">
+                                                        <% ((sub_item[:children] || []).unshift(sub_item)).each_with_index do |ss_item, index| %>
+                                                            <% if index > 0 %>
+                                                                <li class="<%= 'current_item' if ss_item[:current_item] %> <%= 'current_parent_item' if ss_item[:current_parent] %>"><a href="<%= ss_item[:url] %>"><%= ss_item[:label] %></a></li>
+                                                            <% else %>
+                                                                <h6><%= ss_item[:label] %></h6>
+                                                            <% end %>
+                                                        <% end %>
+                                                    </ul>
+                                                </div>
+                                            
+											<% end %>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </ul>
+                                     <div class="clearfix"></div>
+                                 </div>
+                             </ul>
+												
 							</div>
-							<div class="col1">
-								<div class="h_nav">
-									<h4>Popular Brands</h4>
-									<ul>
-										<li><a href="products.html">Levis</a></li>
-										<li><a href="products.html">Persol</a></li>
-										<li><a href="products.html">Nike</a></li>
-										<li><a href="products.html">Edwin</a></li>
-										<li><a href="products.html">New Balance</a></li>
-										<li><a href="products.html">Jack & Jones</a></li>
-										<li><a href="products.html">Paul Smith</a></li>
-										<li><a href="products.html">Ray-Ban</a></li>
-										<li><a href="products.html">Wood Wood</a></li>
-									</ul>	
-								</div>												
+																	
 							</div>
 						  </div>
 						</div>
-					</li>
-				    <li class="grid"><a  href="#">	Women</a>
-					  	<div class="mepanel">
-						<div class="row">
-							<div class="col1">
-								<div class="h_nav">
-									<h4>All Clothing</h4>
-									<ul>
-										<li><a href="products.html">Shirts & Tops</a></li>
-										<li><a href="products.html">Sports Wear</a></li>
-										<li><a href="products.html">Kurtas & Kurties</a></li>
-										<li><a href="products.html">Suits & Blazers</a></li>
-										<li><a href="products.html">Sarees</a></li>
-										<li><a href="products.html">Sweatpants</a></li>
-										<li><a href="products.html">Swimwear</a></li>
-										<li><a href="products.html">Night-Suits</a></li>
-										<li><a href="products.html">T-Shirts</a></li>
-										<li><a href="products.html">Jeans</a></li>
-										
-									</ul>	
-								</div>							
-							</div>
-							<div class="col1">
-								<div class="h_nav">
-									<h4>Footwear</h4>
-									<ul>
-										<li><a href="products.html">Heels</a></li>
-										<li><a href="products.html">Flats</a></li>
-										<li><a href="products.html">Sports Shoes</a></li>
-										<li><a href="products.html">Casual Shoes</a></li>
-										<li><a href="products.html">Running Shoes</a></li>
-										<li><a href="products.html">Wedges</a></li>
-										<li><a href="products.html">Boots</a></li>
-										<li><a href="products.html">Pumps</a></li>
-										<li><a href="products.html">Slippers</a></li>
-										<li><a href="products.html">Flip-flops</a></li>
-									
-									</ul>
-								</div>							
-							</div>
-							<div class="col1">
-								<div class="h_nav">
-									<h4>Popular Brands</h4>
-									<ul>
-										<li><a href="products.html">Levis</a></li>
-										<li><a href="products.html">Persol</a></li>
-										<li><a href="products.html">Nike</a></li>
-										<li><a href="products.html">Edwin</a></li>
-										<li><a href="products.html">New Balance</a></li>
-										<li><a href="products.html">Jack & Jones</a></li>
-										<li><a href="products.html">Paul Smith</a></li>
-										<li><a href="products.html">Ray-Ban</a></li>
-										<li><a href="products.html">Wood Wood</a></li>
-									</ul>	
-								</div>												
-							</div>
-						  </div>
-						</div>
-			    </li>
-				<li><a  href="typo.html">Blog</a></li>				
-				<li><a class="color6" href="contact.html">Conact</a></li>
+					
+					<% end %>
+                <% else %>
+                    <li class="<%= 'active' if item[:current_item] %>"><a href="<%= item[:url] %>"><%= item[:label] %></a></li>
+					
+				<% end %>
+			<% end %>
+				
 			  </ul> 
 			</div>
 				<div class="col-sm-2 search">		
