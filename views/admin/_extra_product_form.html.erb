@@ -1,0 +1,10 @@
+<div class="form-group">
+    <label><%= t('.specifications') %></label><br>
+    <%= text_area_tag "meta[product_specifications]", args[:post].get_meta('product_specifications'), class: 'translatable form-control product_specifications' %>
+</div>
+<script>
+    jQuery(function(){
+        var form = $('#form-post');
+        setTimeout(function(){ form.find('.product_specifications').tinymce(cama_get_tinymce_settings({height: 150})); }, 200);
+    });
+</script>

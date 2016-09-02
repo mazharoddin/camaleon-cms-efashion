@@ -59,16 +59,13 @@
 						<div class="row">
 							<div class="col1">
 								 <% if item[:levels] <= 1 %>
-								<div class="h_nav">
-									<h4>All Clothing</h4>
-									 
+								<div class="h_nav">	 
 									<ul>
 										 <% item[:children].each_with_index do |ss_item, index| %>
 										<li><a href="<%= ss_item[:url] %>"><%= ss_item[:label] %></a></li>
 										 <% end %>
 										
 									</ul>	
-									 
 								</div>							
 							</div>
 							 <% else %>
@@ -163,32 +160,39 @@
 		</div>
 	</div>
 </div>
+<% if is_home? %>
 <!--banner-->
 <div class="banner">
 	<div class="col-sm-3 banner-mat">
-		<img class="img-responsive"	src="images/ba1.jpg" alt="">
+		<img class="img-responsive"	src="<%= theme_asset_url("images/ba1.jpg") %>" alt="">
 	</div>
 	<div class="col-sm-6 matter-banner">
 	 	<div class="slider">
 	    	<div class="callbacks_container">
 	      		<ul class="rslides" id="slider">
+					 
 	        		<li>
-	          			<img src="images/1.jpg" alt="">
+                        <img src="<%= theme_asset_url("images/1.jpg") %>" alt="">  
+	          			
 	       			 </li>
+					
 			 		 <li>
-	          			<img src="images/2.jpg" alt="">   
+	          			<img src="<%= theme_asset_url("images/2.jpg") %>" alt="">   
 	       			 </li>
 					 <li>
-	          			<img src="images/1.jpg" alt="">
+	          			<img src="<%= theme_asset_url("images/1.jpg") %>" alt="">
 	        		</li>	
 	      		</ul>
 	 	 	</div>
+			 <script>$(function () { $("#slider4").responsiveSlides({ auto: true, pager: true, nav: false, speed: 500, namespace: "callbacks", before: function () { $('.events').append("<li>before event fired.</li>"); }, after: function () { $('.events').append("<li>after event fired.</li>"); }}); }); </script>
 		</div>
 	</div>
 	<div class="col-sm-3 banner-mat">
-		<img class="img-responsive" src="images/ba.jpg" alt="">
+		<img class="img-responsive" src="<%= theme_asset_url("images/ba.jpg") %>" alt="">
 	</div>
 	<div class="clearfix"> </div>
 </div>
 <!--//banner-->
+<% end %>
+
 <!--content-->

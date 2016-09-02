@@ -8,7 +8,11 @@
   "hooks": {
     "on_active": ["efashion_on_install_theme"],
     "on_inactive": ["efashion_on_uninstall_theme"],
-    "on_theme_settings": ["efashion_settings"]
+    "on_theme_settings": ["efashion_settings"],
+    "plugin_ecommerce_after_install": ["efashion_ecommerce_after_install"],
+    "post_form_custom_html": ["efashion_custom_inputs_for_products"],
+    "extra_custom_fields": ["efashion_extra_custom_fields"]
+   
     //here all your hooks
   }
 }

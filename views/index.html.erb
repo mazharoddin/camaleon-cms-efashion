@@ -6,7 +6,7 @@
 		<div class="content-top">
 			<h1>Recent Products</h1>
 			<div class="content-top1">
-				<% current_site.the_products.decorate.each do |product| %>
+				<% current_site.the_products.limit(8).decorate.each do |product| %>
 				<div class="col-md-3 col-md2">
 					<div class="col-md1 simpleCart_shelfItem">
 						<a href="<%= product.the_url %>">
@@ -24,11 +24,31 @@
 			
 			<div class="clearfix"> </div>
 			</div>	
-			<div class="content-top1">
-				
-			
-			
-			<div class="clearfix"> </div>
+		   
+			<div class="container">
+				<div class="content-top">
+					<h1>Featured Collection</h1>
+					<div class="content-top1">
+						 <% current_site.the_post_type('commerce').the_posts.featured.limit(4).decorate.each do |product| %>
+						<div class="col-md-3 col-md2">
+							<div class="col-md1 simpleCart_shelfItem">
+								<a href="<%= product.the_url %>">
+									<img class="img-responsive" src="<%= product.the_image_url %>" alt="" />
+								</a>
+								<h3><a href="<%= product.the_url %>"><%= product.the_title %></a></h3>
+								<div class="price">
+										<h5 class="item_price"><%= product.the_price %></h5>
+										<a href="<%= product.the_url %>" class="item_add">Add To Cart</a>
+										<div class="clearfix"> </div>
+								</div>
+							</div>
+							
+						</div>
+						<% end %> 
+					</div>
+						<div class="clearfix"> </div>
+						</div>
+				</div>
 			</div>	
 		</div>
 	</div>

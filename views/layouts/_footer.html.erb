@@ -1,18 +1,22 @@
 <div class="footer">
 	<div class="container">
+		
 		<div class="footer-top">
 			<div class="col-md-8 top-footer">
 				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.91163207516!2d2.3470599!3d48.85885894999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C+France!5e0!3m2!1sen!2sin!4v1436340519910" allowfullscreen=""></iframe>
 			</div>
 			<div class="col-md-4 top-footer1">
 				<h2>Newsletter</h2>
+				 <%= form_tag plugins_cama_subscriber_subscribe_url do %>
 					<form>
-						<input type="text" value="" onfocus="this.value='';" onblur="if (this.value == '') {this.value ='';}">
+						<input type="text" name="email" value="Enter Your Email Her" onfocus="this.value='';" onblur="if (this.value == '') {this.value = 'Enter Your Email Here';}">
 						<input type="submit" value="SUBSCRIBE">
 					</form>
+					<% end %>
 			</div>
 			<div class="clearfix"> </div>	
 		</div>	
+		
 	</div>
 	<div class="footer-bottom">
 		<div class="container">
